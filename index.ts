@@ -11,7 +11,7 @@ import {Tag, TagUtils} from "./Logic/TagsFilter";
 import {FilteredLayer} from "./Logic/FilteredLayer";
 import {LayerUpdater} from "./Logic/LayerUpdater";
 import {UIElement} from "./UI/UIElement";
-import {MessageBoxHandler} from "./UI/MessageBoxHandler";
+import {FullScreenMessageBoxHandler} from "./UI/FullScreenMessageBoxHandler";
 import {Overpass} from "./Logic/Overpass";
 import {FeatureInfoBox} from "./UI/FeatureInfoBox";
 import {GeoLocationHandler} from "./Logic/GeoLocationHandler";
@@ -22,16 +22,22 @@ import {SearchAndGo} from "./UI/SearchAndGo";
 import {CollapseButton} from "./UI/Base/CollapseButton";
 import {AllKnownLayouts} from "./Customizations/AllKnownLayouts";
 import {All} from "./Customizations/Layouts/All";
-
-
+import Translations from "./UI/i18n/Translations";
+import Translation from "./UI/i18n/Translation";
+import Locale from "./UI/i18n/Locale";
+import {Layout, WelcomeMessage} from "./Customizations/Layout";
+import {DropDown} from "./UI/Input/DropDown";
+import {FixedInputElement} from "./UI/Input/FixedInputElement";
+import {FixedUiElement} from "./UI/Base/FixedUiElement";
+import ParkingType from "./Customizations/Questions/bike/ParkingType";
 
 
 // --------------------- Read the URL parameters -----------------
 
 // @ts-ignore
-if(location.href.startsWith("http://buurtnatuur.be")){
+if (location.href.startsWith("http://buurtnatuur.be")) {
     // Reload the https version. This is important for the 'locate me' button
-    window.location.replace("https://buurtnatuur.be"); 
+    window.location.replace("https://buurtnatuur.be");
 }
 
 
@@ -40,10 +46,10 @@ let dryRun = false;
 if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
 
     // Set to true if testing and changes should NOT be saved
-    // dryRun = true;
+    dryRun = true;
     // If you have a testfile somewhere, enable this to spoof overpass
     // This should be hosted independantly, e.g. with `cd assets; webfsd -p 8080` + a CORS plugin to disable cors rules
-    Overpass.testUrl = null; // "http://127.0.0.1:8080/test.json";
+    //Overpass.testUrl = "http://127.0.0.1:8080/streetwidths.geojson";
 }
 
 
@@ -75,8 +81,6 @@ if (window.location.search) {
         var kv = param.split("=");
         paramDict[kv[0]] = kv[1];
     }
-
-
 }
 
 if (paramDict.layout) {
@@ -84,16 +88,23 @@ if (paramDict.layout) {
 }
 
 if (paramDict.test) {
-    dryRun = true;
+    dryRun = paramDict.test === "true";
 }
 
-const layoutToUse = AllKnownLayouts.allSets[defaultLayout];
+const layoutToUse: Layout = AllKnownLayouts.allSets[defaultLayout];
 console.log("Using layout: ", layoutToUse.name);
 
-document.title = layoutToUse.title;
+document.title = layoutToUse.title.InnerRender();
+Locale.language.addCallback(e => {
+    document.title = layoutToUse.title.InnerRender();
+})
 
 
 // ----------------- Setup a few event sources -------------
+
+
+// const LanguageSelect = document.getElementById('language-select') as HTMLOptionElement
+// eLanguageSelect.addEventListener('selectionchange')
 
 
 // The message that should be shown at the center of the screen
@@ -102,9 +113,13 @@ const centerMessage = new UIEventSource<string>("");
 // The countdown: if set to e.g. ten, it'll start counting down. When reaching zero, changes will be saved. NB: this is implemented later, not in the eventSource
 const secondsTillChangesAreSaved = new UIEventSource<number>(0);
 
-const leftMessage = new UIEventSource<() => UIElement>(undefined);
+// const leftMessage = new UIEventSource<() => UIElement>(undefined);
 
-const selectedElement = new UIEventSource<any>(undefined);
+// This message is shown full screen on mobile devices
+const fullScreenMessage = new UIEventSource<UIElement>(undefined);
+
+// The latest element that was selected - used to generate the right UI at the right place
+const selectedElement = new UIEventSource<{feature: any}>(undefined);
 
 
 const locationControl = new UIEventSource<{ lat: number, lon: number, zoom: number }>({
@@ -116,9 +131,19 @@ const locationControl = new UIEventSource<{ lat: number, lon: number, zoom: numb
 
 // ----------------- Prepare the important objects -----------------
 
+const osmConnection = new OsmConnection(dryRun);
+
+
+Locale.language.syncWith(osmConnection.GetPreference("language"));
+
+// @ts-ignore
+window.setLanguage = function (language: string) {
+    Locale.language.setData(language)
+}
+
+
 const saveTimeout = 30000; // After this many milliseconds without changes, saves are sent of to OSM
 const allElements = new ElementStorage();
-const osmConnection = new OsmConnection(dryRun);
 const changes = new Changes(
     "Beantwoorden van vragen met #MapComplete voor vragenset #" + layoutToUse.name,
     osmConnection, allElements);
@@ -141,9 +166,8 @@ const bm = new Basemap("leafletDiv", locationControl, new VariableUiElement(
 
 
 // ------------- Setup the layers -------------------------------
-
 const addButtons: {
-    name: string,
+    name: UIElement,
     icon: string,
     tags: Tag[],
     layerToAddTo: FilteredLayer
@@ -156,9 +180,10 @@ let minZoom = 0;
 
 for (const layer of layoutToUse.layers) {
 
-    const generateInfo = (tagsES) => {
+    const generateInfo = (tagsES, feature) => {
 
         return new FeatureInfoBox(
+            feature,
             tagsES,
             layer.title,
             layer.elementsToShow,
@@ -172,7 +197,7 @@ for (const layer of layoutToUse.layers) {
     const flayer = layer.asLayer(bm, allElements, changes, osmConnection.userDetails, selectedElement, generateInfo);
 
     const addButton = {
-        name: layer.name,
+        name: Translations.W(layer.name),
         icon: layer.icon,
         tags: layer.newElementTags,
         layerToAddTo: flayer
@@ -186,8 +211,13 @@ const layerUpdater = new LayerUpdater(bm, minZoom, flayers);
 
 // ------------------ Setup various UI elements ------------
 
+let languagePicker = new DropDown(" ", layoutToUse.supportedLanguages.map(lang => {
+        return {value: lang, shown: lang}
+    }
+), Locale.language).AttachTo("language-select");
 
-new StrayClickHandler(bm, selectedElement, leftMessage, () => {
+
+new StrayClickHandler(bm, selectedElement, fullScreenMessage, () => {
         return new SimpleAddUI(bm.Location,
             bm.LastClickLocation,
             changes,
@@ -199,23 +229,27 @@ new StrayClickHandler(bm, selectedElement, leftMessage, () => {
 );
 
 /**
- * Show the questions and information for the selected element on the leftMessage
+ * Show the questions and information for the selected element on the fullScreen
  */
-selectedElement.addCallback((data) => {
+selectedElement.addCallback((feature) => {
+    const data = feature.feature.properties;
     // Which is the applicable set?
     for (const layer of layoutToUse.layers) {
 
         const applicable = layer.overpassFilter.matches(TagUtils.proprtiesToKV(data));
         if (applicable) {
             // This layer is the layer that gives the questions
-            leftMessage.setData(() =>
-                new FeatureInfoBox(
-                    allElements.getElement(data.id),
-                    layer.title,
-                    layer.elementsToShow,
-                    changes,
-                    osmConnection.userDetails
-                ));
+
+            const featureBox = new FeatureInfoBox(
+                feature.feature,
+                allElements.getElement(data.id),
+                layer.title,
+                layer.elementsToShow,
+                changes,
+                osmConnection.userDetails
+            );
+
+            fullScreenMessage.setData(featureBox);
             break;
         }
     }
@@ -224,36 +258,30 @@ selectedElement.addCallback((data) => {
 
 
 const pendingChanges = new PendingChanges(
-    changes.pendingChangesES, secondsTillChangesAreSaved, changes.isSaving);
+    changes, secondsTillChangesAreSaved,);
 
-new UserBadge(osmConnection.userDetails, pendingChanges, bm)
+new UserBadge(osmConnection.userDetails,
+    pendingChanges,
+    new FixedUiElement(""),
+    bm)
     .AttachTo('userbadge');
 
 new SearchAndGo(bm).AttachTo("searchbox");
 
 new CollapseButton("messagesbox")
     .AttachTo("collapseButton");
-
-var welcomeMessage = () => {
-    return new VariableUiElement(
-        osmConnection.userDetails.map((userdetails) => {
-            var login = layoutToUse.gettingStartedPlzLogin;
-            if (userdetails.loggedIn) {
-                login = layoutToUse.welcomeBackMessage;
-            }
-            return "<div id='welcomeMessage'>" +
-                layoutToUse.welcomeMessage + login + layoutToUse.welcomeTail +
-                "</div>";
-        }),
-        function () {
-            osmConnection.registerActivateOsmAUthenticationClass()
-        });
-}
-leftMessage.setData(welcomeMessage);
-welcomeMessage().AttachTo("messagesbox");
+new WelcomeMessage(layoutToUse, osmConnection).AttachTo("messagesbox");
+fullScreenMessage.setData(
+    new WelcomeMessage(layoutToUse, osmConnection)
+);
 
 
-var messageBox = new MessageBoxHandler(leftMessage, () => {selectedElement.setData(undefined)});
+new FullScreenMessageBoxHandler(fullScreenMessage, () => {
+    selectedElement.setData(undefined)
+}).update();
+
+// fullScreenMessage.setData(generateWelcomeMessage());
+
 
 new CenterMessageBox(
     minZoom,
@@ -276,4 +304,3 @@ new GeoLocationHandler(bm).AttachTo("geolocate-button");
 // --------------- Send a ping to start various action --------
 
 locationControl.ping();
-messageBox.update();
