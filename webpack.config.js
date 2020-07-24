@@ -14,6 +14,7 @@ module.exports = (env = {}) => ({
   resolve: {
     extensions: [ '.tsx', '.ts', '.js', '.vue' ],
     alias: {
+      '@': path.resolve(__dirname, "src"),
       // this isn't technically needed, since the default `vue` entry for bundlers
       // is a simple `export * from '@vue/runtime-dom`. However having this
       // extra re-export somehow causes webpack to always invalidate the module

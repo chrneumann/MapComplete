@@ -1,0 +1,458 @@
+{
+  "en": {
+    "cyclofix": {
+      "title": "Cyclofix bicycle infrastructure",
+      "description": "On this map we want to collect data about the whereabouts of bicycle pumps and public racks in Brussels.As a result, cyclists will be able to quickly find the nearest infrastructure for their needs.",
+      "freeFormPlaceholder": "specify",
+      "parking": {
+        "name": "bike parking",
+        "title": "Bike parking",
+        "type": {
+          "render": "This is a bicycle parking of the type: {bicycle_parking}",
+          "template": "Some other type: $$$",
+          "question": "What is the type of this bicycle parking?",
+          "eg": ", for example",
+          "stands": "Staple racks",
+          "wall_loops": "Wheel rack/loops",
+          "handlebar_holder": "Handlebar holder",
+          "shed": "Shed",
+          "rack": "Rack",
+          "two-tier": "Two-tiered"
+        },
+        "operator": {
+          "render": "This bike parking is operated by {operator}",
+          "template": "A different operator: $$$",
+          "question": "Who operates this bike station (name of university, shop, city...)?",
+          "private": "Operated by a private person"
+        }
+      },
+      "station": {
+        "name": "bike station (repair, pump or both)",
+        "title": "Bike station",
+        "manometer": {
+          "question": "Does the pump have a pressure indicator or manometer?",
+          "yes": "There is a manometer",
+          "no": "There is no manometer",
+          "broken": "There is manometer but it is broken"
+        },
+        "electric": {
+          "question": "Is this an electric bike pump?",
+          "manual": "Manual pump",
+          "electric": "Electrical pump"
+        },
+        "operational": {
+          "question": "Is the bike pump still operational?",
+          "operational": "The bike pump is operational",
+          "broken": "The bike pump is broken"
+        },
+        "valves": {
+          "question": "What valves are supported?",
+          "default": "There is a default head, so Dunlop, Sclaverand and auto",
+          "dunlop": "Only Dunlop",
+          "sclaverand": "Only Sclaverand (also known as Presta)",
+          "auto": "Only for cars",
+          "render": "This pump supports the following valves: {valves}",
+          "template": "Some other valve(s): $$$"
+        },
+        "chain": {
+          "question": "Does this bike station have a special tool to repair your bike chain?",
+          "yes": "There is a chain tool",
+          "no": "There is no chain tool"
+        },
+        "operator": {
+          "render": "This bike station is operated by {operator}",
+          "template": "A different operator: $$$",
+          "question": "Who operates this bike station (name of university, shop, city...)?",
+          "private": "Operated by a private person"
+        },
+        "services": {
+          "question": "Which services are available at this bike station?",
+          "pump": "There is only a pump available",
+          "tools": "There are only tools (screwdrivers, pliers...) available",
+          "both": "There are both tools and a pump available"
+        },
+        "stand": {
+          "question": "Does this bike station have a hook to suspend your bike with or a stand to elevate it?",
+          "yes": "There is a hook or stand",
+          "no": "There is no hook or stand"
+        }
+      },
+      "shop": {
+        "name": "bike shop",
+        "title": "Bike shop",
+        "titleRepair": "Bike repair",
+        "titleShop": "Bike repair/shop",
+        "titleNamed": "Bike repair/shop",
+        "titleRepairNamed": "Bike shop",
+        "titleShopNamed": "Bike repair/shop",
+        "retail": {
+          "question": "Does this shop sell bikes?",
+          "yes": "This shop sells bikes",
+          "no": "This shop doesn't sell bikes"
+        },
+        "repair": {
+          "question": "Does this shop repair bikes?",
+          "yes": "This shop repairs bikes",
+          "no": "This shop doesn't repair bikes",
+          "sold": "This shop only repairs bikes bought here",
+          "brand": "This shop only repairs bikes of a certain brand"
+        },
+        "rental": {
+          "question": "Does this shop rent out bikes?",
+          "yes": "This shop rents out bikes",
+          "no": "This shop doesn't rent out bikes"
+        },
+        "pump": {
+          "question": "Does this shop offer a bike pump for use by anyone?",
+          "yes": "This shop offers a bike pump for anyone",
+          "no": "This shop doesn't offer a bike pump for anyone"
+        },
+        "qName": {
+          "question": "What is the name of this bicycle shop?",
+          "render": "This bicycle shop is called {name}",
+          "template": "This bicycle shop is called: $$$"
+        },
+        "secondHand": {
+          "question": "Does this shop sell second-hand bikes?",
+          "yes": "This shop sells second-hand bikes",
+          "no": "This shop doesn't sell second-hand bikes",
+          "only": "This shop only sells second-hand bikes"
+        },
+        "diy": {
+          "question": "Are there tools here to repair your own bike?",
+          "yes": "This shop offers tools for DIY repair",
+          "no": "This shop doesn't offer tools for DIY repair"
+        }
+      }
+    },
+    "image": {
+      "addPicture": "Add picture",
+      "uploadingPicture": "Uploading your picture...",
+      "pleaseLogin": "Please login to add a picure or to answer questions",
+      "willBePublished": "Your picture will be published: ",
+      "cco": "in the public domain",
+      "ccbs": "under the CC-BY-SA-license",
+      "ccb": "under the CC-BY-license"
+    },
+    "centerMessage": {
+      "loadingData": "Loading data...",
+      "zoomIn": "Zoom in to view or edit the data",
+      "ready": "Done!"
+    },
+    "general": {
+      "loginWithOpenStreetMap": "Login with OpenStreetMap",
+      "getStarted": "<span class='activate-osm-authentication'>Login with OpenStreetMap</span> or <a href='https://www.openstreetmap.org/user/new' target='_blank'>make a free account to get started</a>",
+      "welcomeBack": "You are logged in, welcome back!",
+      "search": {
+        "search": "Search a location",
+        "searching": "Searching...",
+        "nothing": "Nothing found...",
+        "error": "Something went wrong..."
+      },
+      "returnToTheMap": "Return to the map",
+      "save": "Save",
+      "cancel": "Cancel",
+      "skip": "Skip this question",
+      "oneSkippedQuestion": "One question is skipped",
+      "skippedQuestions": "Some questions are skipped"
+    }
+  },
+  "nl": {
+    "cyclofix": {
+      "title": "Cyclofix fietsinfrastructuur",
+      "description": "Op deze kaart willen we gegevens verzamelen over de locatie van fietspompen en openbare stelplaatsen in Brussel.Hierdoor kunnen fietsers snel de dichtstbijzijnde infrastructuur vinden die voldoet aan hun behoeften.",
+      "freeFormPlaceholder": "specifieer",
+      "parking": {
+        "name": "fietsparking",
+        "title": "Fietsparking",
+        "type": {
+          "render": "Dit is een fietsenparking van het type: {bicycle_parking}",
+          "template": "Een ander type: $$$",
+          "question": "Van welk type is deze fietsenparking?",
+          "eg": ", bijvoorbeeld",
+          "stands": "Nietjes",
+          "wall_loops": "Wielrek/lussen",
+          "handlebar_holder": "Stuurhouder",
+          "shed": "Schuur",
+          "rack": "Rek",
+          "two-tier": "Dubbel (twee verdiepingen)"
+        },
+        "operator": {
+          "render": "Deze fietsenparking wordt beheerd door {operator}",
+          "template": "Een andere beheerder: $$$",
+          "question": "Wie beheert deze fietsenparking (naam universiteit, winkel, stad...)?",
+          "private": "Wordt beheerd door een privépersoon"
+        }
+      },
+      "station": {
+        "name": "fietsstation (herstel, pomp of allebei)",
+        "title": "Fietsstation",
+        "manometer": {
+          "question": "Heeft deze pomp een luchtdrukmeter?",
+          "yes": "Er is een luchtdrukmeter",
+          "no": "Er is geen luchtdrukmeter",
+          "broken": "Er is een luchtdrukmeter maar die is momenteel defect"
+        },
+        "electric": {
+          "question": "Is dit een electrische fietspomp?",
+          "manual": "Manuele pomp",
+          "electric": "Electrische pomp"
+        },
+        "operational": {
+          "question": "Werkt de fietspomp nog?",
+          "operational": "De fietspomp werkt nog",
+          "broken": "De fietspomp is kapot"
+        },
+        "valves": {
+          "question": "Welke ventielen werken er met de pomp?",
+          "default": "Er is een standaard aansluiting, die dus voor Dunlop, Sclaverand en auto's werkt",
+          "dunlop": "Enkel Dunlop",
+          "sclaverand": "Enkel Sclaverand (ook gekend als Presta)",
+          "auto": "Enkel voor auto's",
+          "render": "Deze pomp werkt met de volgende ventielen: {valves}",
+          "template": "Een ander type ventiel(en): $$$"
+        },
+        "chain": {
+          "question": "Heeft dit fietsstation een speciale reparatieset voor je ketting?",
+          "yes": "Er is een reparatieset voor je ketting",
+          "no": "Er is geen reparatieset voor je ketting"
+        },
+        "operator": {
+          "render": "Dit fietsstation wordt beheerd door {operator}",
+          "template": "Een andere beheerder: $$$",
+          "question": "Wie beheert dit fietsstation (naam universiteit, winkel, stad...)?",
+          "private": "Wordt beheerd door een privépersoon"
+        },
+        "services": {
+          "question": "Welke functies biedt dit fietsstation?",
+          "pump": "Er is enkel een pomp beschikbaar",
+          "tools": "Er is enkel gereedschap beschikbaar (schroevendraaier, tang...)",
+          "both": "Er is zowel een pomp als gereedschap beschikbaar"
+        },
+        "stand": {
+          "question": "Heeft dit fietsstation een haak of standaard om je fiets op te hangen/zetten?",
+          "yes": "Er is een haak of standaard",
+          "no": "Er is geen haak of standaard"
+        }
+      },
+      "shop": {
+        "name": "fietswinkel",
+        "title": "Fietszaak",
+        "titleRepair": "Fietsenmaker",
+        "titleShop": "Fietswinkel",
+        "titleNamed": "Fietszaak {name}",
+        "titleRepairNamed": "Fietsenmaker {name}",
+        "titleShopNamed": "Fietswinkel {name}",
+        "retail": {
+          "question": "Verkoopt deze winkel fietsen?",
+          "yes": "Deze winkel verkoopt fietsen",
+          "no": "Deze winkel verkoopt geen fietsen"
+        },
+        "repair": {
+          "question": "Verkoopt deze winkel fietsen?",
+          "yes": "Deze winkel herstelt fietsen",
+          "no": "Deze winkel herstelt geen fietsen",
+          "sold": "Deze winkel herstelt enkel fietsen die hier werden gekocht",
+          "brand": "Deze winkel herstelt enkel fietsen van een bepaald merk"
+        },
+        "rental": {
+          "question": "Verhuurt deze winkel fietsen?",
+          "yes": "Deze winkel verhuurt fietsen",
+          "no": "Deze winkel verhuurt geen fietsen"
+        },
+        "pump": {
+          "question": "Biedt deze winkel een fietspomp aan voor iedereen?",
+          "yes": "Deze winkel biedt geen fietspomp aan voor eender wie",
+          "no": "Deze winkel biedt een fietspomp aan voor iedereen"
+        },
+        "qName": {
+          "question": "Wat is de naam van deze fietszaak?",
+          "render": "Deze fietszaak heet <b>{name}</b>",
+          "template": "Deze fietszaak heet: <b>$$$</b>"
+        },
+        "secondHand": {
+          "question": "Verkoopt deze winkel tweedehands fietsen?",
+          "yes": "Deze winkel verkoopt tweedehands fietsen",
+          "no": "Deze winkel verkoopt geen tweedehands fietsen",
+          "only": "Deze winkel verkoopt enkel tweedehands fietsen"
+        },
+        "diy": {
+          "question": "Biedt deze winkel gereedschap aan om je fiets zelf te herstellen?",
+          "yes": "Deze winkel biedt gereedschap aan om je fiets zelf te herstellen",
+          "no": "Deze winkel biedt geen gereedschap aan om je fiets zelf te herstellen"
+        }
+      }
+    },
+    "image": {
+      "addPicture": "Voeg foto toe",
+      "uploadingPicture": "Bezig met een foto te uploaden...",
+      "pleaseLogin": "Gelieve je aan te melden om een foto toe te voegen of vragen te beantwoorden",
+      "willBePublished": "Jouw foto wordt gepubliceerd: ",
+      "cco": "in het publiek domein",
+      "ccbs": "onder de CC-BY-SA-licentie",
+      "ccb": "onder de CC-BY-licentie"
+    },
+    "centerMessage": {
+      "loadingData": "Data wordt geladen...",
+      "zoomIn": "Zoom in om de data te zien en te bewerken",
+      "ready": "Klaar!"
+    },
+    "general": {
+      "loginWithOpenStreetMap": "Aanmelden met OpenStreetMap",
+      "getStarted": "<span class='activate-osm-authentication'>Meld je aan met je OpenStreetMap-account</span> of <a href='https://www.openstreetmap.org/user/new' target='_blank'>maak snel en gratis een account om te beginnen/a>",
+      "welcomeBack": "Je bent aangemeld. Welkom terug!",
+      "search": {
+        "search": "Zoek naar een locatie",
+        "searching": "Aan het zoeken...",
+        "nothing": "Niet gevonden...",
+        "error": "Niet gelukt..."
+      },
+      "returnToTheMap": "Naar de kaart",
+      "save": "Opslaan",
+      "cancel": "Annuleren",
+      "skip": "Vraag overslaan",
+      "oneSkippedQuestion": "Een vraag is overgeslaan",
+      "skippedQuestions": "Sommige vragen zijn overgeslaan"
+    }
+  },
+  "fr": {
+    "cyclofix": {
+      "title": "TODO: FRENCH TRANSLATION",
+      "description": "Sur cette carte, nous voulons collecter des données sur la localisation des pompes à vélo et des supports publics à Bruxelles.Les cyclistes pourront ainsi trouver rapidement l'infrastructure la plus proche de leurs besoins.",
+      "freeFormPlaceholder": "TODO: fr",
+      "parking": {
+        "name": "TODO: fr",
+        "title": "TODO: fr",
+        "type": {
+          "render": "TODO: fr",
+          "template": "TODO: fr",
+          "question": "TODO: fr",
+          "stands": "TODO: fr",
+          "wall_loops": "TODO: fr",
+          "handlebar_holder": "TODO: fr",
+          "shed": "TODO: fr",
+          "rack": "TODO: fr",
+          "two-tier": "TODO: fr"
+        },
+        "operator": {
+          "render": "TODO: fr",
+          "template": "TODO: fr",
+          "question": "TODO: fr",
+          "private": "TODO: fr"
+        }
+      },
+      "station": {
+        "name": "TODO: fr",
+        "title": "TODO: fr",
+        "manometer": {
+          "question": "TODO: fr",
+          "yes": "TODO: fr",
+          "no": "TODO: fr",
+          "broken": "TODO: fr"
+        },
+        "electric": {
+          "question": "TODO: fr",
+          "manual": "TODO: fr",
+          "electric": "TODO: fr"
+        },
+        "operational": {
+          "question": "TODO: fr",
+          "operational": "TODO: fr",
+          "broken": "TODO: fr"
+        },
+        "valves": {
+          "question": "TODO: fr",
+          "default": "TODO: fr",
+          "dunlop": "TODO: fr",
+          "sclaverand": "TODO: fr",
+          "auto": "TODO: fr",
+          "render": "TODO: fr",
+          "template": "TODO: fr"
+        },
+        "chain": {
+          "question": "TODO: fr",
+          "yes": "TODO: fr",
+          "no": "TODO: fr"
+        },
+        "operator": {
+          "render": "TODO: fr",
+          "template": "TODO: fr",
+          "question": "TODO: fr",
+          "private": "TODO: fr"
+        },
+        "services": {
+          "question": "TODO: fr",
+          "pump": "TODO: fr",
+          "tools": "TODO: fr",
+          "both": "TODO: fr"
+        },
+        "stand": {
+          "question": "TODO: fr",
+          "yes": "TODO: fr",
+          "no": "TODO: fr"
+        }
+      },
+      "shop": {
+        "name": "TODO: fr",
+        "title": "TODO: fr",
+        "titleRepair": "TODO: fr",
+        "titleShop": "TODO: fr",
+        "titleNamed": "TODO: fr",
+        "titleRepairNamed": "TODO: fr",
+        "titleShopNamed": "TODO: fr",
+        "retail": {
+          "question": "TODO: fr",
+          "yes": "TODO: fr",
+          "no": "TODO: fr"
+        },
+        "repair": {
+          "question": "TODO: fr",
+          "yes": "TODO: fr",
+          "no": "TODO: fr",
+          "sold": "TODO: fr",
+          "brand": "TODO: fr"
+        },
+        "rental": {
+          "question": "TODO: fr",
+          "yes": "TODO: fr",
+          "no": "TODO: fr"
+        },
+        "pump": {
+          "question": "TODO: fr",
+          "yes": "TODO: fr",
+          "no": "TODO: fr"
+        },
+        "qName": {
+          "question": "TODO: fr",
+          "render": "TODO: fr",
+          "template": "TODO: fr"
+        },
+        "secondHand": {
+          "question": "TODO: fr",
+          "yes": "TODO: fr",
+          "no": "TODO: fr",
+          "only": "TODO: fr"
+        },
+        "diy": {
+          "question": "TODO: fr",
+          "yes": "TODO: fr",
+          "no": "TODO: fr"
+        }
+      }
+    },
+    "image": {
+      "addPicture": "TODO: fr",
+      "uploadingPicture": "TODO: fr",
+      "pleaseLogin": "TODO: fr",
+      "willBePublished": "TODO: fr",
+      "cco": "TODO: fr",
+      "ccbs": "TODO: fr",
+      "ccb": "TODO: fr"
+    },
+    "centerMessage": {
+      "loadingData": "TODO: fr",
+      "zoomIn": "TODO: fr",
+      "ready": "TODO: fr"
+    }
+  }
+}
