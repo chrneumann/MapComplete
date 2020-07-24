@@ -3,7 +3,7 @@ import {Changes} from "./Logic/Changes";
 import {ElementStorage} from "./Logic/ElementStorage";
 import {UIEventSource} from "./UI/UIEventSource";
 import {UserBadge} from "./UI/UserBadge";
-import {Basemap} from "./Logic/Basemap";
+import {Basemap, BaseLayers} from "./Logic/Basemap";
 import {PendingChanges} from "./UI/PendingChanges";
 import {CenterMessageBox} from "./UI/CenterMessageBox";
 import {Helpers} from "./Helpers";
@@ -12,27 +12,27 @@ import {FilteredLayer} from "./Logic/FilteredLayer";
 import {LayerUpdater} from "./Logic/LayerUpdater";
 import {UIElement} from "./UI/UIElement";
 import {FullScreenMessageBoxHandler} from "./UI/FullScreenMessageBoxHandler";
-import {Overpass} from "./Logic/Overpass";
 import {FeatureInfoBox} from "./UI/FeatureInfoBox";
 import {GeoLocationHandler} from "./Logic/GeoLocationHandler";
 import {StrayClickHandler} from "./Logic/StrayClickHandler";
 import {SimpleAddUI} from "./UI/SimpleAddUI";
 import {VariableUiElement} from "./UI/Base/VariableUIElement";
 import {SearchAndGo} from "./UI/SearchAndGo";
-import {CollapseButton} from "./UI/Base/CollapseButton";
 import {AllKnownLayouts} from "./Customizations/AllKnownLayouts";
-import {All} from "./Customizations/Layouts/All";
+import {CheckBox} from "./UI/Input/CheckBox";
 import Translations from "./UI/i18n/Translations";
-import Translation from "./UI/i18n/Translation";
 import Locale from "./UI/i18n/Locale";
 import {Layout, WelcomeMessage} from "./Customizations/Layout";
 import {DropDown} from "./UI/Input/DropDown";
-import {FixedInputElement} from "./UI/Input/FixedInputElement";
 import {FixedUiElement} from "./UI/Base/FixedUiElement";
-import ParkingType from "./Customizations/Questions/bike/ParkingType";
+import {LayerSelection} from "./UI/LayerSelection";
+import Combine from "./UI/Base/Combine";
+import {Img} from "./UI/Img";
+import {QueryParameters} from "./Logic/QueryParameters";
+import {Utils} from "./Utils";
 
 
-// --------------------- Read the URL parameters -----------------
+// --------------------- Special actions based on the parameters -----------------
 
 // @ts-ignore
 if (location.href.startsWith("http://buurtnatuur.be")) {
@@ -40,13 +40,10 @@ if (location.href.startsWith("http://buurtnatuur.be")) {
     window.location.replace("https://buurtnatuur.be");
 }
 
-
-let dryRun = false;
-
 if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-
     // Set to true if testing and changes should NOT be saved
-    dryRun = true;
+    const testing = QueryParameters.GetQueryParameter("test");
+    testing.setData(testing.data ?? "true")
     // If you have a testfile somewhere, enable this to spoof overpass
     // This should be hosted independantly, e.g. with `cd assets; webfsd -p 8080` + a CORS plugin to disable cors rules
     //Overpass.testUrl = "http://127.0.0.1:8080/streetwidths.geojson";
@@ -55,8 +52,7 @@ if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
 
 // ----------------- SELECT THE RIGHT QUESTSET -----------------
 
-
-let defaultLayout = "buurtnatuur"
+let defaultLayout = "walkbybrussels"
 
 
 // Run over all questsets. If a part of the URL matches a searched-for part in the layout, it'll take that as the default
@@ -73,38 +69,13 @@ for (const k in AllKnownLayouts.allSets) {
     }
 }
 
-// Read the query string to grap settings
-let paramDict: any = {};
-if (window.location.search) {
-    const params = window.location.search.substr(1).split("&");
-    for (const param of params) {
-        var kv = param.split("=");
-        paramDict[kv[0]] = kv[1];
-    }
-}
+defaultLayout = QueryParameters.GetQueryParameter("layout").data ?? defaultLayout;
 
-if (paramDict.layout) {
-    defaultLayout = paramDict.layout
-}
-
-if (paramDict.test) {
-    dryRun = paramDict.test === "true";
-}
-
-const layoutToUse: Layout = AllKnownLayouts.allSets[defaultLayout];
+const layoutToUse: Layout = AllKnownLayouts.allSets[defaultLayout] ?? AllKnownLayouts["all"];
 console.log("Using layout: ", layoutToUse.name);
-
-document.title = layoutToUse.title.InnerRender();
-Locale.language.addCallback(e => {
-    document.title = layoutToUse.title.InnerRender();
-})
 
 
 // ----------------- Setup a few event sources -------------
-
-
-// const LanguageSelect = document.getElementById('language-select') as HTMLOptionElement
-// eLanguageSelect.addEventListener('selectionchange')
 
 
 // The message that should be shown at the center of the screen
@@ -119,19 +90,31 @@ const secondsTillChangesAreSaved = new UIEventSource<number>(0);
 const fullScreenMessage = new UIEventSource<UIElement>(undefined);
 
 // The latest element that was selected - used to generate the right UI at the right place
-const selectedElement = new UIEventSource<{feature: any}>(undefined);
+const selectedElement = new UIEventSource<{ feature: any }>(undefined);
+
+const zoom = QueryParameters.GetQueryParameter("z");
+const lat = QueryParameters.GetQueryParameter("lat");
+const lon = QueryParameters.GetQueryParameter("lon");
 
 
 const locationControl = new UIEventSource<{ lat: number, lon: number, zoom: number }>({
-    zoom: layoutToUse.startzoom,
-    lat: layoutToUse.startLat,
-    lon: layoutToUse.startLon
+    zoom: Utils.asFloat(zoom.data) ?? layoutToUse.startzoom,
+    lat: Utils.asFloat(lat.data) ?? layoutToUse.startLat,
+    lon: Utils.asFloat(lon.data) ?? layoutToUse.startLon
 });
+
+locationControl.addCallback((latlonz) => {
+    zoom.setData(latlonz.zoom.toString());
+    lat.setData(latlonz.lat.toString().substr(0,6));
+    lon.setData(latlonz.lon.toString().substr(0,6));
+})
 
 
 // ----------------- Prepare the important objects -----------------
 
-const osmConnection = new OsmConnection(dryRun);
+const osmConnection = new OsmConnection(
+    QueryParameters.GetQueryParameter("test").data === "true"
+);
 
 
 Locale.language.syncWith(osmConnection.GetPreference("language"));
@@ -209,27 +192,51 @@ for (const layer of layoutToUse.layers) {
 const layerUpdater = new LayerUpdater(bm, minZoom, flayers);
 
 
-// ------------------ Setup various UI elements ------------
+// --------------- Setting up layer selection ui --------
 
-let languagePicker = new DropDown(" ", layoutToUse.supportedLanguages.map(lang => {
+const closedFilterButton = `<button id="filter__button" class="filter__button filter__button--shadow">${Img.closedFilterButton}</button>`;
+
+const openFilterButton = `
+<button id="filter__button" class="filter__button">${Img.openFilterButton}</button>`;
+
+let baseLayerOptions =  BaseLayers.baseLayers.map((layer) => {return {value: layer, shown: layer.name}});
+const backgroundMapPicker = new Combine([new DropDown(`Background map`, baseLayerOptions, bm.CurrentLayer), openFilterButton]);
+const layerSelection = new Combine([`<p class="filter__label">Maplayers</p>`, new LayerSelection(flayers)]);
+let layerControl = backgroundMapPicker;
+if (flayers.length > 1) {
+    layerControl = new Combine([layerSelection, backgroundMapPicker]);
+}
+
+new CheckBox(layerControl, closedFilterButton).AttachTo("filter__selection");
+
+
+// ------------------ Setup various other UI elements ------------
+
+document.title = layoutToUse.title.InnerRender();
+
+Locale.language.addCallback(e => {
+    document.title = layoutToUse.title.InnerRender();
+})
+let languagePicker = new DropDown("", layoutToUse.supportedLanguages.map(lang => {
         return {value: lang, shown: lang}
     }
-), Locale.language).AttachTo("language-select");
+), Locale.language);
 
 
 new StrayClickHandler(bm, selectedElement, fullScreenMessage, () => {
-        return new SimpleAddUI(bm.Location,
-            bm.LastClickLocation,
-            changes,
-            selectedElement,
-            layerUpdater.runningQuery,
-            osmConnection.userDetails,
-            addButtons);
+    return new SimpleAddUI(bm.Location,
+        bm.LastClickLocation,
+        changes,
+        selectedElement,
+        layerUpdater.runningQuery,
+        osmConnection.userDetails,
+        addButtons);
     }
 );
 
 /**
- * Show the questions and information for the selected element on the fullScreen
+ * Show the questions and information for the selected element
+ * This is given to the div which renders fullscreen on mobile devices
  */
 selectedElement.addCallback((feature) => {
     const data = feature.feature.properties;
@@ -257,31 +264,33 @@ selectedElement.addCallback((feature) => {
 );
 
 
-const pendingChanges = new PendingChanges(
-    changes, secondsTillChangesAreSaved,);
+const pendingChanges = new PendingChanges(changes, secondsTillChangesAreSaved,);
 
 new UserBadge(osmConnection.userDetails,
     pendingChanges,
-    new FixedUiElement(""),
+    languagePicker,
     bm)
     .AttachTo('userbadge');
 
 new SearchAndGo(bm).AttachTo("searchbox");
 
-new CollapseButton("messagesbox")
-    .AttachTo("collapseButton");
-new WelcomeMessage(layoutToUse, osmConnection).AttachTo("messagesbox");
-fullScreenMessage.setData(
-    new WelcomeMessage(layoutToUse, osmConnection)
-);
+const welcome = new WelcomeMessage(layoutToUse, osmConnection).onClick(() => {
+});
+
+const help = new FixedUiElement(`<div class='collapse-button-img'><img src='assets/help.svg'  alt='help'></div>`);
+const close = new FixedUiElement(`<div class='collapse-button-img'><img src='assets/close.svg'  alt='close'></div>`);
+new CheckBox(
+    new Combine([
+        new Combine(["<span class='collapse-button'>", close, "</span>"]),
+        welcome]),
+    new Combine(["<span class='open-button'>", help, "</span>"])
+    , true
+).AttachTo("messagesbox")
 
 
 new FullScreenMessageBoxHandler(fullScreenMessage, () => {
     selectedElement.setData(undefined)
 }).update();
-
-// fullScreenMessage.setData(generateWelcomeMessage());
-
 
 new CenterMessageBox(
     minZoom,
@@ -301,6 +310,5 @@ osmConnection.registerActivateOsmAUthenticationClass();
 new GeoLocationHandler(bm).AttachTo("geolocate-button");
 
 
-// --------------- Send a ping to start various action --------
 
-locationControl.ping();
+

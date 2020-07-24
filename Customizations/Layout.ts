@@ -89,20 +89,17 @@ export class WelcomeMessage extends UIElement {
         this.userDetails = osmConnection.userDetails;
 
         this.description = layout.welcomeMessage;
-        console.log("   >>>>",this.description, "DESCR ")
         this.plzLogIn = layout.gettingStartedPlzLogin;
         this.welcomeBack = layout.welcomeBackMessage;
         this.tail = layout.welcomeTail;
     }
 
     InnerRender(): string {
-        return "<div id='welcomeMessage'>" +
+        return "<span id='welcomeMessage'>" +
             this.description.Render() +
-            "<br/>"+
             (this.userDetails.data.loggedIn ? this.welcomeBack : this.plzLogIn).Render() +
-            "<br/>"+
             this.tail.Render() +
-            "</div>"
+            "</span>"
 
             ;
         /*

@@ -184,18 +184,19 @@ export default class Translations {
                         fr: 'TODO: fr'
                     }),
                     pump: new T({
-                        en: 'There is only a pump available',
-                        nl: 'Er is enkel een pomp beschikbaar',
+                        // Note: this previously read: a pump is available. It is not because the pump is present, that it is available (e.g. broken)
+                        en: 'There is only a pump present',
+                        nl: 'Er is enkel een pomp aanwezig',
                         fr: 'TODO: fr'
                     }),
                     tools: new T({
-                        en: 'There are only tools (screwdrivers, pliers...) available',
-                        nl: 'Er is enkel gereedschap beschikbaar (schroevendraaier, tang...)',
+                        en: 'There are only tools (screwdrivers, pliers...) aanwezig',
+                        nl: 'Er is enkel gereedschap aanwezig (schroevendraaier, tang...)',
                         fr: 'TODO: fr'
                     }),
                     both: new T({
-                        en: 'There are both tools and a pump available',
-                        nl: 'Er is zowel een pomp als gereedschap beschikbaar',
+                        en: 'There are both tools and a pump present',
+                        nl: 'Er is zowel een pomp als gereedschap aanwezig',
                         fr: 'TODO: fr'
                     }),
                 },
@@ -296,6 +297,12 @@ export default class Translations {
                     yes: new T({en: 'This shop offers tools for DIY repair', nl: 'Deze winkel biedt gereedschap aan om je fiets zelf te herstellen', fr: 'TODO: fr'}),
                     no: new T({en: 'This shop doesn\'t offer tools for DIY repair', nl: 'Deze winkel biedt geen gereedschap aan om je fiets zelf te herstellen', fr: 'TODO: fr'}),
                 }
+            },
+            drinking_water: {
+                title: new T({
+                    en: 'Drinking water',
+                    nl: "Drinkbaar water"
+                })
             }
         },
         image: {
@@ -332,7 +339,7 @@ export default class Translations {
             loginWithOpenStreetMap: new T({en: "Login with OpenStreetMap", nl: "Aanmelden met OpenStreetMap"}),
             getStarted: new T({
                 en: "<span class='activate-osm-authentication'>Login with OpenStreetMap</span> or <a href='https://www.openstreetmap.org/user/new' target='_blank'>make a free account to get started</a>",
-                nl: "<span class='activate-osm-authentication'>Meld je aan met je OpenStreetMap-account</span> of <a href='https://www.openstreetmap.org/user/new' target='_blank'>maak snel en gratis een account om te beginnen/a>",
+                nl: "<span class='activate-osm-authentication'>Meld je aan met je OpenStreetMap-account</span> of <a href='https://www.openstreetmap.org/user/new' target='_blank'>maak snel en gratis een account om te beginnen</a>",
             }),
             welcomeBack: new T({
                 en: "You are logged in, welcome back!",
@@ -380,6 +387,10 @@ export default class Translations {
             skippedQuestions: new T({
                 en: "Some questions are skipped",
                 nl: "Sommige vragen zijn overgeslaan"
+            }),
+            number: new T({
+                en: "number",
+                nl: "getal"
             })
         }   
     }
