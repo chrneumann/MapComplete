@@ -1,9 +1,9 @@
 <template>
   <div class="app">
-    {{ t('cyclofix.title', {}, { locale: 'en' }) }}
+    {{ t('cyclofix.title') }}
     <div id="topleft-tools">
       <div id="userbadge-and-search">
-        <!-- <UserBadge></UserBadge> -->
+        <UserBadge></UserBadge>
       </div>
     </div>
     <SlippyMap class="map"></SlippyMap>
@@ -14,6 +14,8 @@
 import { defineComponent, ref, Ref, onMounted, nextTick } from "vue"
 import { useI18n } from "vue-i18n"
 import SlippyMap from './SlippyMap.vue'
+import UserBadge from "./components/UserBadge.vue";
+
 
 export default defineComponent({
   setup() {
@@ -22,7 +24,8 @@ export default defineComponent({
     }
   },
   components: {
-    SlippyMap
+    SlippyMap,
+    UserBadge
   }
 });
 
