@@ -1,0 +1,249 @@
+{
+  "id": "vegan",
+  "title": {
+    "de": "Offene Vegankarte",
+    "en": "Open Vegan Map"
+  },
+  "description": {
+    "de": "Auf dieser Karte finden Sie vegane Geschäfte, Restaurants und andere interessante Orte.",
+    "en": "On this map you will find vegan shops, restaurants and other points of interest."
+  },
+  "language": [
+    "de",
+    "en"
+  ],
+  "maintainer": "Christian Neumann <christian@utopicode.de>",
+  "icon": "./assets/themes/vegan/vegan_only_food.svg",
+  "version": "0",
+  "startLat": 0,
+  "startLon": 0,
+  "startZoom": 1,
+  "widenFactor": 0.05,
+  "socialImage": "",
+  "layers": [
+    {
+      "id": "vegan_food",
+      "name": {
+        "de": "Veganes Essen",
+        "en": "Vegan Food"
+      },
+      "minzoom": 13,
+      "overpassTags": {
+        "or": [
+          "diet:vegan=yes",
+          "diet:vegan=only"
+        ]
+      },
+      "title": {
+        "render": {
+          "en": "Vegan Food",
+          "de": "Veganes Essen"
+        }
+      },
+      "description": {
+        "de": "Hier gibt es veganes Essen.",
+        "en": "You will find vegan food here."
+      },
+      "tagRenderings": [
+        {
+          "render": {
+            "en": "<strong>{name}</strong>",
+            "nl": "<strong>{name}</strong>",
+            "de": "<strong>{name}</strong>"
+          },
+          "question": {
+            "en": "What is the name of this location?",
+            "de": "Wie heißt dieser Ort?"
+          },
+          "freeform": {
+            "key": "name"
+          }
+        },
+        "website",
+        "phone",
+        "email",
+        "opening_hours"
+      ],
+      "hideUnderlayingFeaturesMinPercentage": 0,
+      "icon": {
+        "render": "./assets/themes/vegan/vegan_food.svg",
+        "mappings": [
+          {
+            "if": {
+              "and": [
+                "diet:vegan=only"
+              ]
+            },
+            "then": "./assets/themes/vegan/vegan_only_food.svg"
+          },
+          {
+            "if": {
+              "and": [
+                "diet:vegetarian=only"
+              ]
+            },
+            "then": "./assets/themes/vegan/vegan_only_vegetarian.svg"
+          }
+        ]
+      },
+      "width": {
+        "render": "8"
+      },
+      "iconSize": {
+        "render": "40,40,center"
+      },
+      "color": {
+        "render": "#d38d5fAA"
+      },
+      "wayHandling": 2
+    },
+    {
+      "id": "maybe_vegan_food",
+      "name": {
+        "de": "Veganes Essen?",
+        "en": "Vegan Food?"
+      },
+      "minzoom": 18,
+      "overpassTags": {
+        "and": [
+          {
+            "or": [
+              "amenity=restaurant",
+              "amenity=cafe"
+            ]
+          },
+          "diet:vegan="
+        ]
+      },
+      "title": {
+        "render": {
+          "en": "Vegan Food?",
+          "de": "Veganes Essen?"
+        }
+      },
+      "description": {
+        "de": "Gibt es hier veganes essen?",
+        "en": "Can you find vegan food here?"
+      },
+      "tagRenderings": [
+        {
+          "render": {
+            "en": "<strong>{name}</strong>",
+            "de": "<strong>{name}</strong>"
+          },
+          "condition": "name~*"
+        }
+      ],
+      "icon": "./assets/themes/vegan/vegan_unknown.svg",
+      "hideUnderlayingFeaturesMinPercentage": 0,
+      "width": {
+        "render": "2"
+      },
+      "color": {
+        "render": "#ddff55AA"
+      },
+      "wayHandling": 0
+    }
+  ],
+  "roamingRenderings": [
+    {
+      "question": {
+        "en": "Can you find vegan food here?",
+        "de": "Gibt es hier veganes Essen?"
+      },
+      "mappings": [
+        {
+          "if": {
+            "and": [
+              "diet:vegan=only"
+            ]
+          },
+          "then": {
+            "en": "All of the products are vegan.",
+            "de": "Alle Produkte sind vegan."
+          }
+        },
+        {
+          "if": {
+            "and": [
+              "diet:vegan=yes"
+            ]
+          },
+          "then": {
+            "en": "An amount of the products worth mentioning are vegan.",
+            "de": "Ein nennenswerter Anteil der Produkte sind vegan."
+          }
+        },
+        {
+          "if": {
+            "and": [
+              "diet:vegan=limited"
+            ]
+          },
+          "then": {
+            "en": "There are a few vegan products here.",
+            "de": "Hier gibt es wenige vegane Produkte."
+          }
+        },
+        {
+          "if": {
+            "and": [
+              "diet:vegan=no"
+            ]
+          },
+          "then": {
+            "en": "There are no vegan products here.",
+            "de": "Hier gibt es keine veganen Produkte."
+          }
+        }
+      ]
+    },
+    {
+      "question": {
+        "en": "Is there only vegetarian (including vegan) food here?",
+        "de": "Gibt es hier ausschließlich vegetarisches (einschließlich veganem) Essen?"
+      },
+      "condition": {
+        "or": [
+          "diet:vegan=yes",
+          "diet:vegan=limited"
+        ]
+      },
+      "mappings": [
+        {
+          "if": {
+            "and": [
+              "diet:vegetarian=only"
+            ]
+          },
+          "then": {
+            "en": "All of the products are vegetarian.",
+            "de": "Alle Produkte sind vegetarisch."
+          }
+        },
+        {
+          "if": {
+            "and": [
+              "diet:vegetarian=yes"
+            ]
+          },
+          "then": {
+            "en": "An amount of the products worth mentioning are vegetarian.",
+            "de": "Ein nennenswerter Anteil der Produkte sind vegetarisch."
+          }
+        },
+        {
+          "if": {
+            "and": [
+              "diet:vegetarian=limited"
+            ]
+          },
+          "then": {
+            "en": "There are a few vegetarian products here.",
+            "de": "Hier gibt es wenige vegetarische Produkte."
+          }
+        }
+      ]
+    }
+  ]
+}
