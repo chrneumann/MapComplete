@@ -94,7 +94,7 @@
       "color": {
         "render": "#d38d5fAA"
       },
-      "wayHandling": 2
+      "wayHandling": 1
     },
     {
       "id": "maybe_vegan_food",
@@ -141,7 +141,7 @@
       "color": {
         "render": "#ddff55AA"
       },
-      "wayHandling": 0
+      "wayHandling": 1
     }
   ],
   "roamingRenderings": [
