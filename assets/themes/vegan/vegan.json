@@ -15,9 +15,9 @@
   "maintainer": "Christian Neumann <christian@utopicode.de>",
   "icon": "./assets/themes/vegan/vegan_only_food.svg",
   "version": "0",
-  "startLat": 0,
-  "startLon": 0,
-  "startZoom": 1,
+  "startLat": 50.12145,
+  "startLon": 8.636627,
+  "startZoom": 13,
   "widenFactor": 0.05,
   "socialImage": "",
   "layers": [
