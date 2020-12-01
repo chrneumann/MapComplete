@@ -8,7 +8,10 @@ import {UIEventSource} from "../UIEventSource";
  */
 export default class PathName extends UIEventSource<string> {
     idMap = {
-        'node/7849863167': 'foo-bar',
+        'node/2294693961': 'savory',
+        'node/413110332': 'kuli-alma',
+        'node/5161580821': 'vevay',
+        'node/2058306021': 'zeil-kitchen',
     };
     revIdMap = {};
 
