@@ -12,7 +12,7 @@ import {LocalStorageSource} from "./Logic/Web/LocalStorageSource";
 import {QueryParameters} from "./Logic/Web/QueryParameters";
 import {BaseLayer} from "./Logic/BaseLayer";
 import LayoutConfig from "./Customizations/JSON/LayoutConfig";
-import Hash from "./Logic/Web/Hash";
+import PathName from "./Logic/Web/PathName";
 
 /**
  * Contains the global state: a bunch of UI-event sources
@@ -210,17 +210,17 @@ export default class State {
         );
 
 
-        const h = Hash.Get();
+        const pathName = new PathName();
         this.selectedElement.addCallback(selected => {
                 if (selected === undefined) {
-                    h.setData("");
+                    pathName.setSelectedId("");
                 } else {
-                    h.setData(selected.id)
+                    pathName.setSelectedId(selected.id);
                 }
             }
         )
-        h.addCallbackAndRun(hash => {
-            if(hash === undefined || hash === ""){
+        pathName.addCallbackAndRun(name => {
+            if(name === undefined || name === ""){
                self.selectedElement.setData(undefined);
             }
         })

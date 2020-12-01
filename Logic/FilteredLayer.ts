@@ -6,7 +6,7 @@ import {GeoOperations} from "./GeoOperations";
 import {UIElement} from "../UI/UIElement";
 import State from "../State";
 import LayerConfig from "../Customizations/JSON/LayerConfig";
-import Hash from "./Web/Hash";
+import PathName from "./Web/PathName";
 
 /***
  * A filtered layer is a layer which offers a 'set-data' function
@@ -185,7 +185,7 @@ export class FilteredLayer {
                     uiElement.Update();
                 });
 
-                if (feature.properties.id.replace(/\//g, "_") === Hash.Get().data) {
+                if (feature.properties.id === (new PathName()).getSelectedId()) {
                     const center = GeoOperations.centerpoint(feature).geometry.coordinates;
                     popup.setLatLng({lat: center[1], lng: center[0]});
                     popup.openOn(State.state.bm.map);

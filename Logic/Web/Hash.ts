@@ -1,7 +1,9 @@
 import {UIEventSource} from "../UIEventSource";
 
 export default class Hash {
-    
+    /**
+     * Returns an [[UIEventSource]] to handle URL fragments.
+     */
     public static Get() : UIEventSource<string>{
         const hash = new UIEventSource<string>(window.location.hash.substr(1));
         hash.addCallback(h => {
