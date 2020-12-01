@@ -73,7 +73,7 @@
                 "diet:vegan=only"
               ]
             },
-            "then": "./assets/themes/vegan/vegan_only_food.svg"
+            "then": "pin:#97CD00;./assets/themes/vegan/vegan_only_food.svg"
           },
           {
             "if": {
