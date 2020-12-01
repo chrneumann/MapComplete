@@ -6,6 +6,7 @@
   "main": "index.js",
   "staticFiles": {
     "staticPath": [
+      "assets",
       {
         "staticPath": "tiles/",
         "staticOutDir": "tiles/"
@@ -13,15 +14,16 @@
     ]
   },
   "scripts": {
-    "start": "parcel *.html UI/** Logic/** assets/** assets/**/** assets/**/**/** vendor/* vendor/*/*",
+    "start": "parcel index.html",
     "test": "ts-node test/*",
+    "generate:replace-asset-urls": "replace-in-file ./assets/ /assets/ assets/**/*.json",
     "generate:editor-layer-index": "cd assets/ && wget https://osmlab.github.io/editor-layer-index/imagery.geojson --output-document=editor-layer-index.json",
     "generate:images": "ts-node scripts/generateIncludedImages.ts",
     "generate:translations": "ts-node scripts/generateTranslations.ts",
     "generate:layouts": "ts-node scripts/createLayouts.ts",
     "optimize-images": "cd assets/generated/ &&  find -name '*.png' -exec optipng '{}' \\; && echo 'PNGs are optimized'",
-    "generate": "npm run generate:images && npm run generate:translations && npm run generate:layouts && npm run generate:editor-layer-index",
-    "build": "rm -rf dist/ && npm run generate && parcel build --public-url ./ *.html assets/** assets/**/** assets/**/**/** vendor/* vendor/*/*",
+    "generate": "npm run generate:replace-asset-urls && npm run generate:images && npm run generate:translations && npm run generate:layouts && npm run generate:editor-layer-index",
+    "build": "rm -rf dist/ && npm run generate && parcel build --public-url ./ index.html",
     "prepare-deploy": "npm run generate && npm run build && rm -rf .cache",
     "deploy:staging": "npm run prepare-deploy && rm -rf /home/pietervdvn/git/pietervdvn.github.io/Staging/* && cp -r dist/* /home/pietervdvn/git/pietervdvn.github.io/Staging/ && cd /home/pietervdvn/git/pietervdvn.github.io/ && git add * && git commit -m 'New MapComplete Version' && git push && cd - && npm run clean",
     "deploy:production": "rm -rf ./assets/generated && npm run prepare-deploy && npm run optimize-images && rm -rf /home/pietervdvn/git/pietervdvn.github.io/MapComplete/* && cp -r dist/* /home/pietervdvn/git/pietervdvn.github.io/MapComplete/ && cd /home/pietervdvn/git/pietervdvn.github.io/ && git add * && git commit -m 'New MapComplete Version' && git push && cd - && npm run clean",
@@ -62,6 +64,7 @@
     "parcel-plugin-static-files-copy": "^2.4.3",
     "promise-svg2img": "^0.2.0",
     "read-file": "^0.2.0",
+    "replace-in-file": "^6.1.0",
     "ts-node": "^9.0.0",
     "ts-node-dev": "^1.0.0-pre.63",
     "typescript": "^3.9.7",

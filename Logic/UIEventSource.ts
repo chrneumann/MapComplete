@@ -1,3 +1,9 @@
+/**
+ * Allows to watch for changes of some data. Calls registered callbacks when the
+ * data changes.
+ *
+ * @typeParam T The type of the data that is handled.
+ */
 export class UIEventSource<T>{
     
     public data: T;
@@ -8,6 +14,9 @@ export class UIEventSource<T>{
     }
 
 
+    /**
+     * Adds a callback that is called when the data changes.
+     */
     public addCallback(callback: ((latestData: T) => void)): UIEventSource<T> {
         if(callback === console.log){
             // This ^^^ actually works!
@@ -17,11 +26,17 @@ export class UIEventSource<T>{
         return this;
     }
 
+    /**
+     * Adds a callback that is called when the data changes and directly runs it.
+     */
     public addCallbackAndRun(callback: ((latestData: T) => void)): UIEventSource<T> {
         callback(this.data);
         return this.addCallback(callback);
     }
 
+    /**
+     * Updates the data and calls ping().
+     */
     public setData(t: T): UIEventSource<T> {
         if (this.data === t) {
             return;
@@ -31,6 +46,9 @@ export class UIEventSource<T>{
         return this;
     }
 
+    /**
+     * Runs all callbacks.
+     */
     public ping(): void {
         for (const callback of this._callbacks) {
             callback(this.data);
